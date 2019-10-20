@@ -1,0 +1,24 @@
+.node {
+  background: #f6beff;
+  border: 3px solid #9830a1;
+  padding: 8px;
+  display: flex;
+  width: 240px;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.nodeIcon {
+  background: #f78ffe;
+  border: 3px solid #9830a1;
+  border-radius: 10px;
+  margin-right: 16px;
+  width: 50px;
+  height: 50px;
+}
+
+.nodeName {
+  color: #9830a1;
+  font-weight: 500;
+  margin-bottom: 8px;
+}

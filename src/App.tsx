@@ -1,11 +1,8 @@
 import React from 'react';
-import './App.css';
+import GraphView from './GraphView/GraphView';
 
-const App: React.FC = () => {
-  return (
-    <>Hello World
-    </>
-  );
-};
+function App() {
+  return <GraphView />;
+}
 
 export default App;
