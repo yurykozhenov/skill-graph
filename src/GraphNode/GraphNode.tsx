@@ -2,11 +2,19 @@ import React from 'react';
 import styles from './GraphNode.module.css';
 import { Vertex } from '../graphApi';
 
-function GraphNode({ vertex }: { vertex: Vertex }) {
+function GraphNode(
+  {
+    vertex,
+  }: {
+    vertex: Vertex;
+  },
+  ref: React.Ref<HTMLDivElement>
+) {
   return (
     <div
       className={styles.node}
       style={{ left: vertex.position.x, top: vertex.position.y }}
+      ref={ref}
     >
       <div className={styles.nodeIcon} />
 
@@ -18,4 +26,4 @@ function GraphNode({ vertex }: { vertex: Vertex }) {
   );
 }
 
-export default GraphNode;
+export default React.forwardRef(GraphNode);
