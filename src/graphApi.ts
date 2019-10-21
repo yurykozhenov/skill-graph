@@ -23,7 +23,10 @@ export interface Edge {
   endVertex: string;
 }
 
+const BASE_URL =
+  process.env.NODE_ENV === 'production' ? 'http://text-to-sp.tk:3333' : '';
+
 export async function getGraph(name: string): Promise<Graph> {
-  const response = await fetch(`/graph/get/${name}`);
+  const response = await fetch(`${BASE_URL}/graph/get/${name}`);
   return response.json();
 }
