@@ -28,5 +28,11 @@ const BASE_URL =
 
 export async function getGraph(name: string): Promise<Graph> {
   const response = await fetch(`${BASE_URL}/graph/get/${name}`);
-  return response.json();
+  const json = await response.json();
+
+  if (typeof json === 'string') {
+    throw new Error(json);
+  }
+
+  return json;
 }

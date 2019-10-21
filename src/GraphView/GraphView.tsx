@@ -5,7 +5,7 @@ import GraphNode from '../GraphNode/GraphNode';
 import { computeConnectingPoints } from '../computeConnectingPoints';
 import GraphEdges from '../GraphEdges/GraphEdges';
 
-function GraphView() {
+function GraphView({ graphName }: { graphName: string }) {
   const [graph, setGraph] = useState<Graph>();
   const [nodes, setNodes] = useState<HTMLDivElement[]>([]);
 
@@ -16,16 +16,17 @@ function GraphView() {
   useEffect(() => {
     const fetchGraph = async () => {
       try {
-        const fetchedGraph = await getGraph('Gameplay Developer');
+        const fetchedGraph = await getGraph(graphName);
         setGraph(fetchedGraph);
       } catch (err) {
         console.log('Error while trying to fetch graph');
-        throw err;
+        console.error(err);
+        alert(err.message);
       }
     };
 
     fetchGraph();
-  }, []);
+  }, [graphName]);
 
   return (
     <div>
@@ -35,6 +36,7 @@ function GraphView() {
             <GraphNode key={vertex.name} vertex={vertex} ref={vertexRef} />
           ))}
       </div>
+
       <div className={styles.container}>
         {graph && (
           <GraphEdges

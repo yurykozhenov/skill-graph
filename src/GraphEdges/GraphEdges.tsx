@@ -24,6 +24,7 @@ function GraphEdges({
           <polygon points="0 0, 5 3.5, 0 7" fill="#9830a1" />
         </marker>
       </defs>
+
       {graph.edges.map((edge, index) => {
         const startVertexIndex = graph.vertices.findIndex(
           vertex => vertex.name === edge.startVertex
