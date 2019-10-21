@@ -11,6 +11,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://text-to-sp.tk:3333",
   "browserslist": {
     "production": [
       ">0.2%",

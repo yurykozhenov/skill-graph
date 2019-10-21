@@ -18,23 +18,6 @@ function GraphView() {
       try {
         const fetchedGraph = await getGraph('Gameplay Developer');
         setGraph(fetchedGraph);
-
-        // TODO: Remove latter. This code is just for demo purposes
-        setInterval(() => {
-          const newVertexPositions = fetchedGraph.vertices.map(() => ({
-            x: Math.round(Math.random() * (window.innerWidth - 280)),
-            y: Math.round(Math.random() * (window.innerHeight - 50)),
-          }));
-
-          setGraph({
-            ...fetchedGraph,
-            vertices: fetchedGraph.vertices.map((vertex, index) => ({
-              ...vertex,
-              position: newVertexPositions[index],
-            })),
-          });
-          setNodes(currentNodes => [...currentNodes]);
-        }, 3000);
       } catch (err) {
         console.log('Error while trying to fetch graph');
         throw err;
