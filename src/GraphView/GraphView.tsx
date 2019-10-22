@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './GraphView.module.css';
 import { getGraph, Graph } from '../graphApi';
 import GraphNode from '../GraphNode/GraphNode';
@@ -8,6 +8,8 @@ import GraphEdges from '../GraphEdges/GraphEdges';
 function GraphView({ graphName }: { graphName: string }) {
   const [graph, setGraph] = useState<Graph>();
   const [nodes, setNodes] = useState<HTMLDivElement[]>([]);
+
+  const edgeContainerRef = useRef<HTMLDivElement>(null);
 
   const vertexRef = useCallback((node: HTMLDivElement) => {
     setNodes(nodes => [...nodes, node]);
@@ -28,6 +30,27 @@ function GraphView({ graphName }: { graphName: string }) {
     fetchGraph();
   }, [graphName]);
 
+  const edgeContainerRect = edgeContainerRef.current
+    ? edgeContainerRef.current.getBoundingClientRect()
+    : undefined;
+
+  // Shifts computation of connecting points relatively to parent container
+  function addParentContainerOffset(rect: ClientRect): ClientRect {
+    if (!edgeContainerRect) {
+      return rect;
+    }
+
+    return {
+      ...rect,
+      top: rect.top - edgeContainerRect.top,
+      right: rect.right - edgeContainerRect.left,
+      bottom: rect.bottom - edgeContainerRect.top,
+      left: rect.left - edgeContainerRect.left,
+    };
+  }
+
+  const bodyRect = document.body.getBoundingClientRect();
+
   return (
     <div>
       <div className={styles.container}>
@@ -37,12 +60,16 @@ function GraphView({ graphName }: { graphName: string }) {
           ))}
       </div>
 
-      <div className={styles.container}>
+      <div className={styles.container} ref={edgeContainerRef}>
         {graph && (
           <GraphEdges
+            width={bodyRect.width}
+            height={bodyRect.height}
             graph={graph}
             connectingPoints={Array.from(nodes).map(node =>
-              computeConnectingPoints(node.getBoundingClientRect())
+              computeConnectingPoints(
+                addParentContainerOffset(node.getBoundingClientRect())
+              )
             )}
           />
         )}

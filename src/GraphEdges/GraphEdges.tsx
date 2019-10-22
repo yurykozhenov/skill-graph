@@ -6,12 +6,16 @@ import { Graph, Point } from '../graphApi';
 function GraphEdges({
   graph,
   connectingPoints,
+  width,
+  height,
 }: {
   graph: Graph;
   connectingPoints: Point[][];
+  width: number;
+  height: number;
 }) {
   return (
-    <svg height="100vh" width="100vw">
+    <svg width={width} height={height}>
       <defs>
         <marker
           id="arrowhead"
