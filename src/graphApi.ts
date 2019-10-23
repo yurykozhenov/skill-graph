@@ -24,7 +24,7 @@ export interface Edge {
 }
 
 const BASE_URL =
-  process.env.NODE_ENV === 'production' ? 'http://text-to-sp.tk:3333' : '';
+  process.env.NODE_ENV === 'production' ? 'https://ges.samaranin.dev' : '';
 
 export async function getGraph(name: string): Promise<Graph> {
   const response = await fetch(`${BASE_URL}/graph/get/${name}`);
