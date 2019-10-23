@@ -61,8 +61,8 @@ function GraphView({ graphName }: { graphName: string }) {
       <div className={styles.container} ref={edgeContainerRef}>
         {graph && (
           <GraphEdges
-            width={document.scrollWidth}
-            height={document.scrollHeight}
+            width={document.body.scrollWidth}
+            height={document.body.scrollHeight}
             graph={graph}
             connectingPoints={Array.from(nodes).map(node =>
               computeConnectingPoints(
