@@ -11,7 +11,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://text-to-sp.tk:3333",
+  "proxy": "https://ges.samaranin.dev",
   "browserslist": {
     "production": [
       ">0.2%",
