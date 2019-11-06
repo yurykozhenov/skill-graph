@@ -1,19 +1,26 @@
 import React from 'react';
 import styles from './GraphNode.module.css';
-import { Vertex } from '../graphApi';
+import { Vertex, VertexPosition } from '../graphApi';
 
 function GraphNode(
   {
     vertex,
+    position,
+    height,
   }: {
     vertex: Vertex;
+    position: VertexPosition | undefined;
+    height?: number;
   },
   ref: React.Ref<HTMLDivElement>
 ) {
+  const left = position ? position.x : 0;
+  const top = height == null && position ? position.y : 0;
+
   return (
     <div
       className={styles.node}
-      style={{ left: vertex.position.x, top: vertex.position.y }}
+      style={{ left, top, height }}
       ref={ref}
     >
       <div className={styles.nodeIcon} />

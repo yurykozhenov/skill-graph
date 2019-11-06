@@ -2,15 +2,16 @@ export interface Graph {
   name: string;
   vertices: Vertex[];
   edges: Edge[];
+  positions: VertexPosition[];
 }
 
 export interface Vertex {
   name: string;
   rate: number;
-  position: Point;
   level: string;
-  graphList: unknown[];
-  courseList: unknown[];
+  graphList: string[];
+  courseList: string[];
+  branchOfKnowledge: BranchOfKnowledge;
 }
 
 export interface Point {
@@ -21,6 +22,15 @@ export interface Point {
 export interface Edge {
   startVertex: string;
   endVertex: string;
+}
+
+export interface VertexPosition extends Point {
+  graphName: string;
+  vertexName: string;
+}
+
+export interface BranchOfKnowledge {
+  name: string
 }
 
 const BASE_URL =

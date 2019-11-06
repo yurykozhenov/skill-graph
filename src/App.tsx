@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <div style={{ position: 'absolute', padding: '16px' }}>
+      <div style={{ padding: '16px' }}>
         <label>
           <div>Graph Name:</div>
           <input
