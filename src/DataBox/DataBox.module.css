@@ -1,16 +1,14 @@
-.node {
+.box {
   background: #f6beff;
   border: 3px solid #9830a1;
   padding: 8px;
   display: flex;
+  align-items: center;
   width: 240px;
   border-radius: 10px;
-  position: absolute;
-  align-items: center;
-  cursor: pointer;
 }
 
-.nodeIcon {
+.boxIcon {
   background: #f78ffe;
   border: 2px solid #9830a1;
   border-radius: 10px;
@@ -20,7 +18,7 @@
   flex-shrink: 0;
 }
 
-.nodeName {
+.boxName {
   color: #9830a1;
   font-weight: 500;
   margin-bottom: 4px;

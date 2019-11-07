@@ -1,4 +1,4 @@
-.container {
+.mainContainer {
   padding: 16px;
 }
 
@@ -6,7 +6,8 @@
   margin-top: 0;
 }
 
-.list {
-  margin-bottom: 0;
-  padding-left: 20px;
+.boxGrid {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 8px;
 }

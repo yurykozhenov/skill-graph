@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import styles from './GraphNode.module.css';
 import { Vertex, VertexPosition } from '../graphApi';
 import { GraphNodeModal } from './GraphNodeModal';
+import DataBox from '../DataBox/DataBox';
 
 function GraphNode(
   {
@@ -22,19 +22,14 @@ function GraphNode(
 
   return (
     <>
-      <div
+      <DataBox
         ref={ref}
-        className={styles.node}
-        style={{ left, top, height }}
+        title={vertex.name}
         onClick={() => setModalOpen(true)}
+        style={{ position: 'absolute', left, top, height }}
       >
-        <div className={styles.nodeIcon} />
-
-        <div>
-          <div className={styles.nodeName}>{vertex.name}</div>
-          <div>{Array.from({ length: vertex.rate }).map(() => '⭐')}</div>
-        </div>
-      </div>
+        {Array.from({ length: vertex.rate }).map(() => '⭐')}
+      </DataBox>
 
       <GraphNodeModal
         open={isModalOpen}

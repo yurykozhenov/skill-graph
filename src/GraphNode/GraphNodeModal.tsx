@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Vertex } from '../graphApi';
 import styles from './GraphNodeModal.module.css';
 import { Modal } from '../Modal/Modal';
+import DataBox from '../DataBox/DataBox';
+import { Drawer } from '../Drawer/Drawer';
 
 export function GraphNodeModal({
   open,
@@ -12,19 +14,37 @@ export function GraphNodeModal({
   onClose: () => void;
   vertex: Vertex;
 }) {
+  const [selectedCourse, setSelectedCourse] = useState<string>();
+
   return (
     <Modal open={open} onClose={onClose}>
-      <div className={styles.container}>
+      <div className={styles.mainContainer}>
         <h3 className={styles.title}>{vertex.name}</h3>
 
         {vertex.courseList.length > 0 ? (
-          <ul className={styles.list}>
-            {vertex.courseList.map(course => (
-              <li key={course}>{course}</li>
-            ))}
-          </ul>
+          <>
+            <div className={styles.boxGrid}>
+              {vertex.courseList.map(course => (
+                <DataBox
+                  key={course}
+                  title={course}
+                  onClick={() => setSelectedCourse(course)}
+                />
+              ))}
+            </div>
+
+            <Drawer
+              open={selectedCourse != null}
+              onClose={() => setSelectedCourse(undefined)}
+            >
+              <div style={{ padding: 8 }}>
+                <h3>{selectedCourse}</h3>
+                <p>Some course details...</p>
+              </div>
+            </Drawer>
+          </>
         ) : (
-          <div>No courses</div>
+          <div>No courses available</div>
         )}
       </div>
     </Modal>

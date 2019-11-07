@@ -1,12 +1,12 @@
 import React from 'react';
 import { Overlay } from '../Overlay/Overlay';
-import styles from './Modal.module.css';
+import styles from './Drawer.module.css';
 
-export function Modal({
+export function Drawer({
   open,
   onClose,
   children,
-  hasBackdrop = true,
+  hasBackdrop = false,
 }: {
   open: boolean;
   onClose: (e: React.MouseEvent | React.KeyboardEvent) => void;
