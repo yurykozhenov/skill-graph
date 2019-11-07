@@ -51,34 +51,6 @@ function GraphView({ graphName }: { graphName: string }) {
 
   return (
     <div>
-      <div className={styles.container}>
-        {graph &&
-          graph.vertices.map(vertex => {
-            const hasNoEdges = !graph.edges.some(
-              edge =>
-                edge.startVertex === vertex.name ||
-                edge.endVertex === vertex.name
-            );
-
-            return (
-              <GraphNode
-                key={vertex.name}
-                ref={vertexRef}
-                vertex={vertex}
-                position={graph.positions.find(
-                  position => position.vertexName === vertex.name
-                )}
-                height={
-                  hasNoEdges
-                    ? Math.max(...graph.positions.map(position => position.y)) +
-                      (edgeContainerRect ? edgeContainerRect.top : 0)
-                    : undefined
-                }
-              />
-            );
-          })}
-      </div>
-
       <div className={styles.container} ref={edgeContainerRef}>
         {graph && (
           <GraphEdges
@@ -98,6 +70,34 @@ function GraphView({ graphName }: { graphName: string }) {
             )}
           />
         )}
+      </div>
+
+      <div className={styles.container}>
+        {graph &&
+        graph.vertices.map(vertex => {
+          const hasNoEdges = !graph.edges.some(
+            edge =>
+              edge.startVertex === vertex.name ||
+              edge.endVertex === vertex.name
+          );
+
+          return (
+            <GraphNode
+              key={vertex.name}
+              ref={vertexRef}
+              vertex={vertex}
+              position={graph.positions.find(
+                position => position.vertexName === vertex.name
+              )}
+              height={
+                hasNoEdges
+                  ? Math.max(...graph.positions.map(position => position.y)) +
+                  (edgeContainerRect ? edgeContainerRect.top : 0)
+                  : undefined
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );

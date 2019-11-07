@@ -15,7 +15,7 @@ function GraphEdges({
   height: number;
 }) {
   return (
-    <svg width={width} height={height}>
+    <svg width={width} height={height} style={{ position: 'absolute' }}>
       <defs>
         <marker
           id="arrowhead"
