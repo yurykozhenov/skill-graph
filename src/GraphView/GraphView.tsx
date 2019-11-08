@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './GraphView.module.css';
-import { getGraph} from '../graphApi';
+import { getGraph } from '../graphApi';
 import GraphNode from '../GraphNode/GraphNode';
 import { computeConnectingPoints } from '../computeConnectingPoints';
 import GraphEdges from '../GraphEdges/GraphEdges';
@@ -13,10 +13,14 @@ function GraphView({ graphName }: { graphName: string }) {
   const edgeContainerRef = useRef<HTMLDivElement>(null);
 
   const vertexRef = useCallback((node: HTMLDivElement) => {
-    setNodes(nodes => [...nodes, node]);
+    if (node) {
+      setNodes(nodes => [...nodes, node]);
+    }
   }, []);
 
   useEffect(() => {
+    setNodes([]);
+
     const fetchGraph = async () => {
       try {
         const fetchedGraph = await getGraph(graphName);
@@ -50,10 +54,12 @@ function GraphView({ graphName }: { graphName: string }) {
     };
   }
 
+  if (!graph) return null;
+
   return (
     <div>
       <div className={styles.container} ref={edgeContainerRef}>
-        {graph && (
+        {
           <GraphEdges
             width={
               document.body.scrollWidth -
@@ -70,16 +76,14 @@ function GraphView({ graphName }: { graphName: string }) {
               )
             )}
           />
-        )}
+        }
       </div>
 
       <div className={styles.container}>
-        {graph &&
-        graph.vertices.map(vertex => {
+        {graph.vertices.map(vertex => {
           const hasNoEdges = !graph.edges.some(
             edge =>
-              edge.startVertex === vertex.name ||
-              edge.endVertex === vertex.name
+              edge.startVertex === vertex.name || edge.endVertex === vertex.name
           );
 
           return (
@@ -93,7 +97,7 @@ function GraphView({ graphName }: { graphName: string }) {
               height={
                 hasNoEdges
                   ? Math.max(...graph.positions.map(position => position.y)) +
-                  (edgeContainerRect ? edgeContainerRect.top : 0)
+                    (edgeContainerRect ? edgeContainerRect.top : 0)
                   : undefined
               }
             />

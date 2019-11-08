@@ -30,5 +30,13 @@ export interface VertexPosition extends Point {
 }
 
 export interface BranchOfKnowledge {
-  name: string
+  name: string;
+}
+
+export interface Course {
+  name: string;
+  description: string;
+  difficulty: string;
+  link: string;
+  verticesList: string[];
 }
