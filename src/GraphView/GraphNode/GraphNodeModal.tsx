@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from './GraphNodeModal.module.css';
-import { Modal } from '../Modal/Modal';
-import DataBox from '../DataBox/DataBox';
-import { Drawer } from '../Drawer/Drawer';
-import { Course, Vertex } from '../graphTypes';
-import { getCourse } from '../graphApi';
+import { Modal } from '../../shared/Modal/Modal';
+import DataBox from '../../shared/DataBox/DataBox';
+import { Drawer } from '../../shared/Drawer/Drawer';
+import { Course, Vertex } from '../../graphTypes';
+import { getCourse } from '../../graphApi';
 
 export function GraphNodeModal({
   open,

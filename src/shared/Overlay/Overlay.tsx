@@ -43,7 +43,7 @@ export function Overlay({
       if (openedOverlays > 0) {
         openedOverlays--;
       }
-    }
+    };
   }, [open]);
 
   function handleBackdropClick(e: React.MouseEvent) {

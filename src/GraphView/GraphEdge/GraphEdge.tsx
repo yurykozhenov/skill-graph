@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './GraphEdge.module.css';
-import { Point } from '../graphTypes';
+import { Point } from '../../graphTypes';
 
 function GraphEdge({ points }: { points: [Point, Point] }) {
   return (

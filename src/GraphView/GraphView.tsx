@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './GraphView.module.css';
 import { getGraph } from '../graphApi';
-import GraphNode from '../GraphNode/GraphNode';
-import { computeConnectingPoints } from '../computeConnectingPoints';
-import GraphEdges from '../GraphEdges/GraphEdges';
+import GraphNode from './GraphNode/GraphNode';
+import { computeConnectingPoints } from '../utils/computeConnectingPoints';
+import GraphEdges from './GraphEdges/GraphEdges';
 import { Graph } from '../graphTypes';
 
 function GraphView({ graphName }: { graphName: string }) {

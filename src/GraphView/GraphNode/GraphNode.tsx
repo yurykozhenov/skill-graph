@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GraphNodeModal } from './GraphNodeModal';
-import DataBox from '../DataBox/DataBox';
-import { Vertex, VertexPosition } from '../graphTypes';
+import DataBox from '../../shared/DataBox/DataBox';
+import { Vertex, VertexPosition } from '../../graphTypes';
 
 function GraphNode(
   {
