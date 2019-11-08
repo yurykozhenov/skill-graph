@@ -1,6 +1,8 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './Overlay.module.css';
+
+let openedOverlays = 0;
 
 export function Overlay({
   open,
@@ -19,7 +21,7 @@ export function Overlay({
   const mouseDownTarget = useRef<unknown>(null);
 
   useLayoutEffect(() => {
-    if (!document.body.parentElement) return;
+    if (!document.body.parentElement || openedOverlays > 0) return;
 
     if (open) {
       document.body.parentElement.style.overflow = 'hidden';
@@ -29,6 +31,18 @@ export function Overlay({
       }
     } else {
       document.body.parentElement.style.overflow = '';
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      openedOverlays++;
+    }
+
+    return () => {
+      if (openedOverlays > 0) {
+        openedOverlays--;
+      }
     }
   }, [open]);
 
