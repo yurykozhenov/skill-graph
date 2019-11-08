@@ -1,7 +1,7 @@
 import React from 'react';
 import GraphEdge from '../GraphEdge/GraphEdge';
 import { getTwoClosestPoints } from '../getTwoClosestPoints';
-import { Graph, Point } from '../graphApi';
+import { Graph, Point } from '../graphTypes';
 
 function GraphEdges({
   graph,

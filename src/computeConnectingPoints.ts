@@ -1,4 +1,4 @@
-import { Point } from './graphApi';
+import { Point } from './graphTypes';
 
 export function computeConnectingPoints(rect: ClientRect): Point[] {
   return [

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Vertex } from '../graphApi';
 import styles from './GraphNodeModal.module.css';
 import { Modal } from '../Modal/Modal';
 import DataBox from '../DataBox/DataBox';
 import { Drawer } from '../Drawer/Drawer';
+import { Vertex } from '../graphTypes';
 
 export function GraphNodeModal({
   open,

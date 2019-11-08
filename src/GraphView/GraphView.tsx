@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './GraphView.module.css';
-import { getGraph, Graph } from '../graphApi';
+import { getGraph} from '../graphApi';
 import GraphNode from '../GraphNode/GraphNode';
 import { computeConnectingPoints } from '../computeConnectingPoints';
 import GraphEdges from '../GraphEdges/GraphEdges';
+import { Graph } from '../graphTypes';
 
 function GraphView({ graphName }: { graphName: string }) {
   const [graph, setGraph] = useState<Graph>();
