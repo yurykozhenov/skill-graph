@@ -20,50 +20,62 @@ function GraphView({
 
   const {
     graph,
+    graphWidth,
+    graphHeight,
+    connectingPoints,
     registerVertexNode,
-    getEdgesInfo,
     getVertexInfo,
     onVertexDrag,
+    saveGraph,
   } = useGraph(graphName, edgeContainerRect);
 
   const vertexRef = useCallback(registerVertexNode, []);
 
   if (!graph) return null;
 
-  const { edgesWidth, edgesHeight, connectingPoints } = getEdgesInfo();
-
   return (
-    <div>
-      <div className={styles.container} ref={edgeContainerRef}>
-        <GraphEdges
-          graph={graph}
-          width={edgesWidth}
-          height={edgesHeight}
-          connectingPoints={connectingPoints}
-        />
+    <>
+      {dragAndDrop && (
+        <div style={{ padding: 16 }}>
+          <button onClick={() => saveGraph()}>Save Graph</button>
+        </div>
+      )}
+
+      <div>
+        <div className={styles.container} ref={edgeContainerRef}>
+          <GraphEdges
+            graph={graph}
+            width={graphWidth}
+            height={graphHeight}
+            connectingPoints={connectingPoints}
+          />
+        </div>
+
+        <VertexContainer
+          dragAndDrop={dragAndDrop}
+          onVertexDrag={onVertexDrag}
+          style={{ width: graphWidth, height: graphHeight }}
+        >
+          {graph.vertices.map(vertex => {
+            const { vertexHeight, vertexPosition } = getVertexInfo(
+              vertex,
+              graph
+            );
+
+            return (
+              <GraphNode
+                key={vertex.name}
+                ref={vertexRef}
+                vertex={vertex}
+                position={vertexPosition}
+                height={vertexHeight}
+                dragAndDrop={dragAndDrop}
+              />
+            );
+          })}
+        </VertexContainer>
       </div>
-
-      <VertexContainer
-        dragAndDrop={dragAndDrop}
-        onVertexDrag={onVertexDrag}
-        style={{ width: edgesWidth, height: edgesHeight }}
-      >
-        {graph.vertices.map(vertex => {
-          const { vertexHeight, vertexPosition } = getVertexInfo(vertex, graph);
-
-          return (
-            <GraphNode
-              key={vertex.name}
-              ref={vertexRef}
-              vertex={vertex}
-              position={vertexPosition}
-              height={vertexHeight}
-              dragAndDrop={dragAndDrop}
-            />
-          );
-        })}
-      </VertexContainer>
-    </div>
+    </>
   );
 }
 

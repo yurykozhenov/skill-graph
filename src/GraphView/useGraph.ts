@@ -51,42 +51,36 @@ export function useGraph(
     };
   }
 
-  function getEdgesInfo() {
-    const maxX = Math.max(
-      ...nodes.map(node => node.getBoundingClientRect().right)
-    );
-    const edgesWidth = maxX - (edgeContainerRect ? edgeContainerRect.left : 0);
+  const nodeRects = nodes.map(node => node.getBoundingClientRect());
 
-    const edgesHeight = getHeight();
+  const maxX = Math.max(...nodeRects.map(rect => rect.right));
+  const graphWidth =
+    nodeRects.length > 0
+      ? maxX - (edgeContainerRect ? edgeContainerRect.left : 0)
+      : 0;
 
-    const connectingPoints = nodes.map(node =>
-      computeConnectingPoints(
-        addParentContainerOffset(node.getBoundingClientRect())
-      )
-    );
+  const maxY = Math.max(...nodeRects.map(rect => rect.bottom));
+  const graphHeight =
+    nodeRects.length > 0
+      ? maxY - (edgeContainerRect ? edgeContainerRect.top : 0)
+      : 0;
 
-    return { edgesWidth, edgesHeight, connectingPoints };
-  }
+  const connectingPoints = nodeRects.map(rect =>
+    computeConnectingPoints(addParentContainerOffset(rect))
+  );
 
   function getVertexInfo(vertex: Vertex, vertexGraph: Graph) {
     const hasNoEdges = !vertexGraph.edges.some(
       edge => edge.startVertex === vertex.name || edge.endVertex === vertex.name
     );
 
-    const vertexHeight = hasNoEdges ? getHeight() : undefined;
+    const vertexHeight = hasNoEdges ? graphHeight : undefined;
 
     const vertexPosition = vertexGraph.positions.find(
       position => position.vertexName === vertex.name
     );
 
     return { vertexHeight, vertexPosition };
-  }
-
-  function getHeight() {
-    const maxY = Math.max(
-      ...nodes.map(node => node.getBoundingClientRect().bottom)
-    );
-    return maxY - (edgeContainerRect ? edgeContainerRect.top : 0);
   }
 
   const updateGraphPositions = useCallback(
@@ -132,8 +126,10 @@ export function useGraph(
 
   return {
     graph,
+    graphWidth,
+    graphHeight,
+    connectingPoints,
     registerVertexNode,
-    getEdgesInfo,
     getVertexInfo,
     onVertexDrag,
     saveGraph,
