@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { DropTargetMonitor, XYCoord } from 'react-dnd';
+import throttle from 'lodash/throttle';
 import { Graph, Vertex } from '../graphTypes';
-import { getGraph } from '../graphApi';
+import { getGraph, updateGraph } from '../graphApi';
 import { computeConnectingPoints } from '../utils/computeConnectingPoints';
+import { DragItem } from '../shared/DragAndDrop/DropContainer';
 
 export function useGraph(
   graphName: string,
@@ -49,15 +52,14 @@ export function useGraph(
   }
 
   function getEdgesInfo() {
-    const edgesWidth =
-      document.body.scrollWidth -
-      (edgeContainerRect ? edgeContainerRect.left : 0);
+    const maxX = Math.max(
+      ...nodes.map(node => node.getBoundingClientRect().right)
+    );
+    const edgesWidth = maxX - (edgeContainerRect ? edgeContainerRect.left : 0);
 
-    const edgesHeight =
-      document.body.scrollHeight -
-      (edgeContainerRect ? edgeContainerRect.top : 0);
+    const edgesHeight = getHeight();
 
-    const connectingPoints = Array.from(nodes).map(node =>
+    const connectingPoints = nodes.map(node =>
       computeConnectingPoints(
         addParentContainerOffset(node.getBoundingClientRect())
       )
@@ -71,10 +73,7 @@ export function useGraph(
       edge => edge.startVertex === vertex.name || edge.endVertex === vertex.name
     );
 
-    const vertexHeight = hasNoEdges
-      ? Math.max(...vertexGraph.positions.map(position => position.y)) +
-        (edgeContainerRect ? edgeContainerRect.top : 0)
-      : undefined;
+    const vertexHeight = hasNoEdges ? getHeight() : undefined;
 
     const vertexPosition = vertexGraph.positions.find(
       position => position.vertexName === vertex.name
@@ -83,5 +82,60 @@ export function useGraph(
     return { vertexHeight, vertexPosition };
   }
 
-  return { graph, registerVertexNode, getEdgesInfo, getVertexInfo };
+  function getHeight() {
+    const maxY = Math.max(
+      ...nodes.map(node => node.getBoundingClientRect().bottom)
+    );
+    return maxY - (edgeContainerRect ? edgeContainerRect.top : 0);
+  }
+
+  const updateGraphPositions = useCallback(
+    throttle((item: DragItem) => {
+      setGraph(oldGraph =>
+        oldGraph
+          ? {
+              ...oldGraph,
+              positions: oldGraph.positions.map(position =>
+                position.vertexName === item.id
+                  ? {
+                      ...position,
+                      x: item.left,
+                      y: item.top,
+                    }
+                  : position
+              ),
+            }
+          : oldGraph
+      );
+    }, 10),
+    []
+  );
+
+  const onVertexDrag = (item: DragItem, monitor: DropTargetMonitor) => {
+    if (!graph) return;
+
+    const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
+
+    if (!delta || (Math.abs(delta.x) < 1 || Math.abs(delta.y) < 1)) return;
+
+    const left = Math.round(item.left + delta.x);
+    const top = Math.round(item.top + delta.y);
+
+    updateGraphPositions({ ...item, left, top });
+  };
+
+  async function saveGraph() {
+    if (!graph) return;
+
+    await updateGraph(graphName, graph);
+  }
+
+  return {
+    graph,
+    registerVertexNode,
+    getEdgesInfo,
+    getVertexInfo,
+    onVertexDrag,
+    saveGraph,
+  };
 }

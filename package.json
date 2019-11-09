@@ -37,16 +37,20 @@
     ]
   },
   "dependencies": {
+    "lodash": "^4.17.15",
     "react": "^16.10.2",
+    "react-dnd": "^9.4.0",
+    "react-dnd-html5-backend": "^9.4.0",
     "react-dom": "^16.10.2"
   },
   "devDependencies": {
     "@types/jest": "24.0.18",
+    "@types/lodash": "^4.14.146",
     "@types/node": "12.7.12",
     "@types/react": "16.9.5",
     "@types/react-dom": "16.9.1",
+    "prettier": "1.18.2",
     "react-scripts": "3.2.0",
-    "typescript": "3.6.4",
-    "prettier": "1.18.2"
+    "typescript": "3.6.4"
   }
 }

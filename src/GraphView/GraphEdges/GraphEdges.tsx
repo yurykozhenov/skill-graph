@@ -29,7 +29,7 @@ function GraphEdges({
         </marker>
       </defs>
 
-      {graph.edges.map((edge, index) => {
+      {graph.edges.map(edge => {
         const startVertexIndex = graph.vertices.findIndex(
           vertex => vertex.name === edge.startVertex
         );
@@ -46,7 +46,7 @@ function GraphEdges({
 
         return (
           <GraphEdge
-            key={index}
+            key={`${startVertexIndex}-${endVertexIndex}`}
             points={getTwoClosestPoints(
               startConnectingPoints,
               endConnectingPoints
