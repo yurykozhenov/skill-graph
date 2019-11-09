@@ -1,15 +1,17 @@
 import React from 'react';
 import GraphEdge from '../GraphEdge/GraphEdge';
 import { getTwoClosestPoints } from '../../utils/getTwoClosestPoints';
-import { Graph, Point } from '../../graphTypes';
+import { Edge, Point, Vertex } from '../../graphTypes';
 
 function GraphEdges({
-  graph,
+  edges,
+  vertices,
   connectingPoints,
   width,
   height,
 }: {
-  graph: Graph;
+  edges: Edge[];
+  vertices: Vertex[],
   connectingPoints: Point[][];
   width: number;
   height: number;
@@ -29,11 +31,11 @@ function GraphEdges({
         </marker>
       </defs>
 
-      {graph.edges.map(edge => {
-        const startVertexIndex = graph.vertices.findIndex(
+      {edges.map(edge => {
+        const startVertexIndex = vertices.findIndex(
           vertex => vertex.name === edge.startVertex
         );
-        const endVertexIndex = graph.vertices.findIndex(
+        const endVertexIndex = vertices.findIndex(
           vertex => vertex.name === edge.endVertex
         );
 
@@ -44,13 +46,18 @@ function GraphEdges({
 
         if (!startConnectingPoints || !endConnectingPoints) return null;
 
+        const [point1, point2] = getTwoClosestPoints(
+          startConnectingPoints,
+          endConnectingPoints
+        );
+
         return (
           <GraphEdge
             key={`${startVertexIndex}-${endVertexIndex}`}
-            points={getTwoClosestPoints(
-              startConnectingPoints,
-              endConnectingPoints
-            )}
+            x1={point1.x}
+            y1={point1.y}
+            x2={point2.x}
+            y2={point2.y}
           />
         );
       })}

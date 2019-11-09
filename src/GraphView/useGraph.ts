@@ -6,16 +6,22 @@ import { getGraph, updateGraph } from '../graphApi';
 import { computeConnectingPoints } from '../utils/computeConnectingPoints';
 import { DragItem } from '../shared/DragAndDrop/DropContainer';
 
+const THROTTLE_TIME = 40;
+
 export function useGraph(
   graphName: string,
-  edgeContainerRect: ClientRect | undefined
+  {
+    containerTop,
+    containerLeft,
+  }: { containerTop: number; containerLeft: number }
 ) {
   const [graph, setGraph] = useState<Graph>();
   const [nodes, setNodes] = useState<HTMLDivElement[]>([]);
+  const nodeRects = nodes.map(node => node.getBoundingClientRect());
 
   function registerVertexNode(node: HTMLDivElement) {
     if (node) {
-      setNodes(nodes => [...nodes, node]);
+      setNodes(oldNodes => [...oldNodes, node]);
     }
   }
 
@@ -36,34 +42,22 @@ export function useGraph(
     fetchGraph();
   }, [graphName]);
 
-  // Shifts computation of connecting points relatively to parent container
-  function addParentContainerOffset(rect: ClientRect): ClientRect {
-    if (!edgeContainerRect) {
-      return rect;
-    }
-
-    return {
-      ...rect,
-      top: rect.top - edgeContainerRect.top,
-      right: rect.right - edgeContainerRect.left,
-      bottom: rect.bottom - edgeContainerRect.top,
-      left: rect.left - edgeContainerRect.left,
-    };
-  }
-
-  const nodeRects = nodes.map(node => node.getBoundingClientRect());
-
   const maxX = Math.max(...nodeRects.map(rect => rect.right));
-  const graphWidth =
-    nodeRects.length > 0
-      ? maxX - (edgeContainerRect ? edgeContainerRect.left : 0)
-      : 0;
+  const graphWidth = nodeRects.length > 0 ? maxX - containerLeft : 0;
 
   const maxY = Math.max(...nodeRects.map(rect => rect.bottom));
-  const graphHeight =
-    nodeRects.length > 0
-      ? maxY - (edgeContainerRect ? edgeContainerRect.top : 0)
-      : 0;
+  const graphHeight = nodeRects.length > 0 ? maxY - containerTop : 0;
+
+  // Shifts computation of connecting points relatively to parent container
+  function addParentContainerOffset(rect: ClientRect): ClientRect {
+    return {
+      ...rect,
+      top: rect.top - containerTop,
+      right: rect.right - containerLeft,
+      bottom: rect.bottom - containerTop,
+      left: rect.left - containerLeft,
+    };
+  }
 
   const connectingPoints = nodeRects.map(rect =>
     computeConnectingPoints(addParentContainerOffset(rect))
@@ -101,7 +95,7 @@ export function useGraph(
             }
           : oldGraph
       );
-    }, 10),
+    }, THROTTLE_TIME),
     []
   );
 

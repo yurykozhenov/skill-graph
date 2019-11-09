@@ -27,7 +27,10 @@ function GraphView({
     getVertexInfo,
     onVertexDrag,
     saveGraph,
-  } = useGraph(graphName, edgeContainerRect);
+  } = useGraph(graphName, {
+    containerTop: edgeContainerRect ? edgeContainerRect.top : 0,
+    containerLeft: edgeContainerRect ? edgeContainerRect.left : 0,
+  });
 
   const vertexRef = useCallback(registerVertexNode, []);
 
@@ -44,7 +47,8 @@ function GraphView({
       <div>
         <div className={styles.container} ref={edgeContainerRef}>
           <GraphEdges
-            graph={graph}
+            edges={graph.edges}
+            vertices={graph.vertices}
             width={graphWidth}
             height={graphHeight}
             connectingPoints={connectingPoints}
