@@ -10,7 +10,7 @@ export interface Vertex {
   rate: number;
   level: string;
   graphList: string[];
-  courseList: string[];
+  courseList: Course[];
   branchOfKnowledge: BranchOfKnowledge;
 }
 
@@ -38,5 +38,5 @@ export interface Course {
   description: string;
   difficulty: string;
   link: string;
-  verticesList: string[];
+  verticesNames: string[];
 }

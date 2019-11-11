@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './GraphNodeModal.module.css';
 import { Modal } from '../../shared/Modal/Modal';
 import DataBox from '../../shared/DataBox/DataBox';
 import { Drawer } from '../../shared/Drawer/Drawer';
 import { Course, Vertex } from '../../graphTypes';
-import { getCourse } from '../../graphApi';
 
 export function GraphNodeModal({
   open,
@@ -15,21 +14,7 @@ export function GraphNodeModal({
   onClose: () => void;
   vertex: Vertex;
 }) {
-  const [selectedCourse, setSelectedCourse] = useState<string>();
-  const [courseInfo, setCourseInfo] = useState<Course>();
-
-  useEffect(() => {
-    if (!selectedCourse) return;
-
-    (async () => {
-      try {
-        const course = await getCourse(selectedCourse);
-        setCourseInfo(course);
-      } catch (e) {
-        setSelectedCourse(undefined);
-      }
-    })();
-  }, [selectedCourse]);
+  const [selectedCourse, setSelectedCourse] = useState<Course>();
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -41,8 +26,8 @@ export function GraphNodeModal({
             <div className={styles.boxGrid}>
               {vertex.courseList.map(course => (
                 <DataBox
-                  key={course}
-                  title={course}
+                  key={course.name}
+                  title={course.name}
                   onClick={() => setSelectedCourse(course)}
                 />
               ))}
@@ -52,10 +37,23 @@ export function GraphNodeModal({
               open={selectedCourse != null}
               onClose={() => setSelectedCourse(undefined)}
             >
-              <div style={{ padding: 8 }}>
-                <h3>{selectedCourse}</h3>
-                {courseInfo && <p>{JSON.stringify(courseInfo)}</p>}
-              </div>
+              {selectedCourse && (
+                <div style={{ padding: 8 }}>
+                  <h3>{selectedCourse.name}</h3>
+
+                  <a href={selectedCourse.link}>{selectedCourse.link}</a>
+
+                  <h4>Difficulty</h4>
+                  <p>{selectedCourse.difficulty}</p>
+
+                  <h4>Description</h4>
+                  {selectedCourse.description
+                    .split('\n')
+                    .map((paragraph, index) => (
+                      <p key={index}>{paragraph}</p>
+                    ))}
+                </div>
+              )}
             </Drawer>
           </>
         ) : (
