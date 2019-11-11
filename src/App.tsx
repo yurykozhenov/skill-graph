@@ -22,7 +22,7 @@ function App() {
         </ul>
       </nav>
 
-      <div style={{ padding: 16 }}>
+      <div style={{ padding: '8px 16px' }}>
         <label>
           <div>Graph Name:</div>
           <input

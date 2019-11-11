@@ -1,5 +1,5 @@
 import React from 'react';
-import GraphEdge from '../GraphEdge/GraphEdge';
+import GraphEdge, { EdgeMode } from '../GraphEdge/GraphEdge';
 import { getTwoClosestPoints } from '../../utils/getTwoClosestPoints';
 import { Edge, Point, Vertex } from '../../graphTypes';
 
@@ -9,12 +9,14 @@ function GraphEdges({
   connectingPoints,
   width,
   height,
+  mode,
 }: {
   edges: Edge[];
-  vertices: Vertex[],
+  vertices: Vertex[];
   connectingPoints: Point[][];
   width: number;
   height: number;
+  mode: EdgeMode;
 }) {
   return (
     <svg width={width} height={height} style={{ position: 'absolute' }}>
@@ -58,6 +60,7 @@ function GraphEdges({
             y1={point1.y}
             x2={point2.x}
             y2={point2.y}
+            mode={mode}
           />
         );
       })}
