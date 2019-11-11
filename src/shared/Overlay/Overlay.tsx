@@ -10,12 +10,14 @@ export function Overlay({
   children,
   hasBackdrop,
   className,
+  style,
 }: {
   open: boolean;
   onClose: (e: React.MouseEvent | React.KeyboardEvent) => void;
   children: React.ReactNode;
   hasBackdrop: boolean;
   className: string;
+  style?: React.CSSProperties;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseDownTarget = useRef<unknown>(null);
@@ -78,6 +80,7 @@ export function Overlay({
       {open && (
         <div
           className={styles.overlayRoot}
+          style={style}
           role="presentation"
           onKeyDown={handleKeyDown}
         >
