@@ -33,7 +33,7 @@ function getD({ x1, y1, x2, y2, mode }: Props) {
     case 'curve2':
       return `M ${x1} ${y1} C ${x1},${y2} ${x1},${y2} ${x2},${y2}`;
     default:
-      return `M ${x1} ${y1} l ${x2 - x1} ${y2 - y1}`;
+      return `M ${x1} ${y1} L ${x2} ${y2}`;
   }
 }
 
