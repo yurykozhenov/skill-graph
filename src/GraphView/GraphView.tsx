@@ -51,6 +51,9 @@ function GraphView({
             <option value="line">Line</option>
             <option value="curve1">Curve 1</option>
             <option value="curve2">Curve 2</option>
+            <option value="bezier1">Bezier curve 1</option>
+            <option value="bezier2">Bezier curve 2</option>
+            <option value="bezier3">Bezier curve 3</option>
           </select>
         </label>
       </div>
