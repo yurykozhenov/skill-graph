@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, XYCoord } from 'react-dnd';
-import throttle from 'lodash/throttle';
-import { Graph, Vertex } from '../graphTypes';
+import { Graph, Vertex, VertexPosition } from '../graphTypes';
 import { getGraph, updateGraph } from '../graphApi';
 import { computeConnectingPoints } from '../utils/computeConnectingPoints';
 import { DragItem } from '../shared/DragAndDrop/DropContainer';
-
-const THROTTLE_TIME = 40;
 
 export function useGraph(
   graphName: string,
@@ -18,6 +15,8 @@ export function useGraph(
   const [graph, setGraph] = useState<Graph>();
   const [nodes, setNodes] = useState<HTMLDivElement[]>([]);
   const nodeRects = nodes.map(node => node.getBoundingClientRect());
+
+  const updatedPositionsRef = useRef<VertexPosition[] | null>(null);
 
   function registerVertexNode(node: HTMLDivElement) {
     if (node) {
@@ -41,6 +40,30 @@ export function useGraph(
 
     fetchGraph();
   }, [graphName]);
+
+  // Batches re-renders caused by drag-and-drop to improve performance
+  useEffect(() => {
+    if (!graph) return;
+
+    let request: number;
+
+    const performAnimation = () => {
+      request = requestAnimationFrame(performAnimation);
+
+      if (updatedPositionsRef.current) {
+        setGraph({
+          ...graph,
+          positions: updatedPositionsRef.current,
+        });
+
+        updatedPositionsRef.current = null;
+      }
+    };
+
+    requestAnimationFrame(performAnimation);
+
+    return () => cancelAnimationFrame(request);
+  }, [graph]);
 
   const maxX = Math.max(...nodeRects.map(rect => rect.right));
   const graphWidth = nodeRects.length > 0 ? maxX - containerLeft : 0;
@@ -66,34 +89,24 @@ export function useGraph(
     return { vertexHeight, vertexPosition };
   }
 
-  const updateGraphPositions = useCallback(
-    throttle((item: DragItem) => {
-      setGraph(oldGraph =>
-        oldGraph
-          ? {
-              ...oldGraph,
-              positions: oldGraph.positions.map(position =>
-                position.vertexName === item.id
-                  ? {
-                      ...position,
-                      x: item.left,
-                      y: item.top,
-                    }
-                  : position
-              ),
-            }
-          : oldGraph
-      );
-    }, THROTTLE_TIME),
-    []
-  );
+  function updateGraphPositions(item: DragItem) {
+    updatedPositionsRef.current = graph
+      ? graph.positions.map(position =>
+          position.vertexName === item.id
+            ? {
+                ...position,
+                x: item.left,
+                y: item.top,
+              }
+            : position
+        )
+      : null;
+  }
 
   const onVertexDrag = (item: DragItem, monitor: DropTargetMonitor) => {
     if (!graph) return;
 
     const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
-
-    if (!delta || (Math.abs(delta.x) < 1 || Math.abs(delta.y) < 1)) return;
 
     const left = Math.round(item.left + delta.x);
     const top = Math.round(item.top + delta.y);
