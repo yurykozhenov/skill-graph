@@ -55,7 +55,7 @@ function GraphEdges({
 
         return (
           <GraphEdge
-            key={`${startVertexIndex}-${endVertexIndex}`}
+            key={`${edge.startVertex}-${edge.endVertex}`}
             x1={point1.x}
             y1={point1.y}
             x2={point2.x}

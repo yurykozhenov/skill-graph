@@ -51,4 +51,4 @@ function getD({ x1, y1, x2, y2, mode }: Props) {
   }
 }
 
-export default GraphEdge;
+export default React.memo(GraphEdge);

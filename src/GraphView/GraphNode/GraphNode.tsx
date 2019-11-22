@@ -82,4 +82,4 @@ const NodeContainer = React.forwardRef(function(
   );
 });
 
-export default React.forwardRef(GraphNode);
+export default React.memo(React.forwardRef(GraphNode));

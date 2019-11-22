@@ -17,7 +17,7 @@ function GraphView({
   const edgeContainerRef = useRef<HTMLDivElement>(null);
   const edgeContainerRect = edgeContainerRef.current
     ? edgeContainerRef.current.getBoundingClientRect()
-    : undefined;
+    : { top: 0, left: 0, bottom: 0, right: 0 };
 
   const {
     graph,
@@ -29,8 +29,8 @@ function GraphView({
     onVertexDrag,
     saveGraph,
   } = useGraph(graphName, {
-    containerTop: edgeContainerRect ? edgeContainerRect.top : 0,
-    containerLeft: edgeContainerRect ? edgeContainerRect.left : 0,
+    containerTop: edgeContainerRect.top,
+    containerLeft: edgeContainerRect.left,
   });
 
   const vertexRef = useCallback(registerVertexNode, []);

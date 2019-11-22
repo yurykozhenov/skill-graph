@@ -48,19 +48,8 @@ export function useGraph(
   const maxY = Math.max(...nodeRects.map(rect => rect.bottom));
   const graphHeight = nodeRects.length > 0 ? maxY - containerTop : 0;
 
-  // Shifts computation of connecting points relatively to parent container
-  function addParentContainerOffset(rect: ClientRect): ClientRect {
-    return {
-      ...rect,
-      top: rect.top - containerTop,
-      right: rect.right - containerLeft,
-      bottom: rect.bottom - containerTop,
-      left: rect.left - containerLeft,
-    };
-  }
-
   const connectingPoints = nodeRects.map(rect =>
-    computeConnectingPoints(addParentContainerOffset(rect))
+    computeConnectingPoints(rect, { containerTop, containerLeft })
   );
 
   function getVertexInfo(vertex: Vertex, vertexGraph: Graph) {
