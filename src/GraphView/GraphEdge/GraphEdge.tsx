@@ -1,24 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './GraphEdge.module.css';
-
-export type EdgeMode =
-  | 'curve1'
-  | 'curve2'
-  | 'bezier1'
-  | 'bezier2'
-  | 'bezier3'
-  | 'line';
+import EdgeModeContext, { EdgeMode } from '../../EdgeModeContext';
 
 interface Props {
   x1: number;
   y1: number;
   x2: number;
   y2: number;
-  mode: EdgeMode;
 }
 
-function GraphEdge({ x1, y1, x2, y2, mode }: Props) {
-  const d = getD({ x1, y1, x2, y2, mode });
+function GraphEdge({ x1, y1, x2, y2 }: Props) {
+  const edgeMode = useContext(EdgeModeContext);
+
+  const d = getD({ x1, y1, x2, y2, mode: edgeMode });
 
   return (
     <>
@@ -32,7 +26,7 @@ function GraphEdge({ x1, y1, x2, y2, mode }: Props) {
   );
 }
 
-function getD({ x1, y1, x2, y2, mode }: Props) {
+function getD({ x1, y1, x2, y2, mode }: Props & { mode: EdgeMode }) {
   switch (mode) {
     case 'curve1':
       return `M ${x1} ${y1} C ${x2},${y1} ${x1},${y2} ${x2},${y2}`;

@@ -1,4 +1,4 @@
 .line {
-  stroke: #9830a1;
+  stroke: var(--primary-color);
   stroke-width: 2;
 }

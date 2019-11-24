@@ -16,9 +16,28 @@ body,
 html,
 #root {
   height: 100%;
-  width: 100%;
 }
 
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --primary-color: rgba(170, 0, 170, 1);
+  --box-background-color: rgba(170, 0, 170, 0.4);
+  --background-color: #ffffff;
+  --text-color: rgba(0, 0, 0, 0.87);
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--primary-color);
 }

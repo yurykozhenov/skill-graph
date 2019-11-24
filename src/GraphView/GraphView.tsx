@@ -1,11 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import styles from './GraphView.module.css';
 import GraphNode from './GraphNode/GraphNode';
 import GraphEdges from './GraphEdges/GraphEdges';
 import { useGraph } from './useGraph';
 import DropContainer, { DragItem } from '../shared/DragAndDrop/DropContainer';
 import { DropTargetMonitor } from 'react-dnd';
-import { EdgeMode } from './GraphEdge/GraphEdge';
 
 function GraphView({
   graphName,
@@ -35,36 +34,17 @@ function GraphView({
 
   const vertexRef = useCallback(registerVertexNode, []);
 
-  const [edgeMode, setEdgeMode] = useState<EdgeMode>('line');
-
   if (!graph) return null;
 
   return (
     <>
-      <div style={{ padding: '8px 16px' }}>
-        <label>
-          <div>Edge Drawing Mode</div>
-          <select
-            value={edgeMode}
-            onChange={e => setEdgeMode(e.target.value as EdgeMode)}
-          >
-            <option value="line">Line</option>
-            <option value="curve1">Curve 1</option>
-            <option value="curve2">Curve 2</option>
-            <option value="bezier1">Bezier curve 1</option>
-            <option value="bezier2">Bezier curve 2</option>
-            <option value="bezier3">Bezier curve 3</option>
-          </select>
-        </label>
-      </div>
-
       {dragAndDrop && (
         <div style={{ padding: '8px 16px' }}>
           <button onClick={() => saveGraph()}>Save Graph</button>
         </div>
       )}
 
-      <div>
+      <div style={{ overflow: 'auto', paddingTop: 8 }}>
         <div className={styles.container} ref={edgeContainerRef}>
           <GraphEdges
             edges={graph.edges}
@@ -72,7 +52,6 @@ function GraphView({
             width={graphWidth}
             height={graphHeight}
             connectingPoints={connectingPoints}
-            mode={edgeMode}
           />
         </div>
 

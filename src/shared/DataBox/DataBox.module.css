@@ -1,6 +1,6 @@
 .box {
-  background: #f6beff;
-  border: 3px solid #9830a1;
+  background: var(--box-background-color);
+  border: 3px solid var(--primary-color);
   padding: 8px;
   display: flex;
   align-items: center;
@@ -9,9 +9,14 @@
   height: 100%;
 }
 
+.box:focus {
+  outline: none;
+  border-color: lightblue;
+}
+
 .boxIcon {
-  background: #f78ffe;
-  border: 2px solid #9830a1;
+  background: var(--box-background-color);
+  border: 2px solid var(--primary-color);
   border-radius: 10px;
   margin-right: 16px;
   width: 56px;
@@ -20,7 +25,7 @@
 }
 
 .boxName {
-  color: #9830a1;
+  color: var(--primary-color);
   font-weight: 500;
   margin-bottom: 4px;
 }

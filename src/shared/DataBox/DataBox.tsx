@@ -17,6 +17,7 @@ function DataBox({
       className={`${styles.box} ${className || ''}`}
       style={onClick ? { cursor: 'pointer' } : undefined}
       onClick={onClick}
+      tabIndex={onClick ? 0 : undefined}
     >
       <div className={styles.boxIcon} />
 
