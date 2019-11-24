@@ -23,7 +23,8 @@ html,
 }
 
 :root {
-  --primary-color: rgba(170, 0, 170, 1);
+  --primary-color: rgb(170, 0, 170);
+  --primary-light-color: rgb(255, 0, 255);
   --box-background-color: rgba(170, 0, 170, 0.4);
   --background-color: #ffffff;
   --text-color: rgba(0, 0, 0, 0.87);

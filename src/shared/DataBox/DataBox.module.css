@@ -11,7 +11,7 @@
 
 .box:focus {
   outline: none;
-  border-color: lightblue;
+  border-color: var(--primary-light-color);
 }
 
 .boxIcon {
