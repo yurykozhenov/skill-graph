@@ -1,0 +1,13 @@
+.navigationList {
+  display: flex;
+  list-style-type: none;
+  padding: 4px 16px;
+  margin: 8px 16px;
+  border: 1px solid var(--primary-color);
+}
+
+.navigationList li:not(:last-child)::after {
+  content: '|';
+  color: var(--primary-color);
+  padding: 0 8px;
+}

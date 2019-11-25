@@ -4,6 +4,7 @@ import GraphView from './GraphView/GraphView';
 import GraphEdit from './GraphEdit/GraphEdit';
 import ThemeSwitch from './shared/ThemeSwitch/ThemeSwitch';
 import EdgeModeContext, { EdgeMode } from './EdgeModeContext';
+import styles from './App.module.css';
 
 function App() {
   const [localGraphName, setLocalGraphName] = useState<string>(
@@ -16,10 +17,15 @@ function App() {
     <BrowserRouter>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <nav>
-          <ul>
+          <ul className={styles.navigationList}>
             <li>
               <Link to="/">View</Link>
             </li>
+
+            <li>
+              <Link to="/create">Create</Link>
+            </li>
+
             <li>
               <Link to="/edit">Edit</Link>
             </li>
