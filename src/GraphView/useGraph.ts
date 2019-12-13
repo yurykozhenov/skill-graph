@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, XYCoord } from 'react-dnd';
+import clamp from 'lodash/clamp'
 import { Graph, Vertex, VertexPosition } from '../graphTypes';
 import { getGraph, updateGraph } from '../graphApi';
 import { computeConnectingPoints } from '../utils/computeConnectingPoints';
@@ -108,8 +109,10 @@ export function useGraph(
 
     const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
 
-    const left = Math.round(item.left + delta.x);
-    const top = Math.round(item.top + delta.y);
+    const left = clamp(Math.round(item.left + delta.x), 0, graphWidth);
+    const top = clamp(Math.round(item.top + delta.y), 0, graphHeight);
+
+    if (item.left === left && item.top === top) return;
 
     updateGraphPositions({ ...item, left, top });
   };
