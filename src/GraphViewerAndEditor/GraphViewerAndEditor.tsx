@@ -5,7 +5,7 @@ import GraphEdges from './GraphEdges/GraphEdges';
 import { useGraphViewerAndEditor } from './useGraphViewerAndEditor';
 import DropContainer, { DragItem } from '../shared/DragAndDrop/DropContainer';
 import { DropTargetMonitor } from 'react-dnd';
-import { Graph } from '../graphTypes';
+import { Edge, Graph } from '../graphTypes';
 
 function GraphViewerAndEditor({
   initialGraph,
@@ -65,32 +65,39 @@ function GraphViewerAndEditor({
   }
 
   function connectVertex(vertexName: string) {
-    if (vertexToConnect && vertexToConnect !== vertexName) {
-      setVertexToConnect(undefined);
-
-      // Prevents duplicate edges
-      if (
-        graph.edges.some(
-          edge =>
-            (edge.startVertex === vertexName &&
-              edge.endVertex === vertexToConnect) ||
-            (edge.startVertex === vertexToConnect &&
-              edge.endVertex === vertexName)
-        )
-      ) {
-        return;
-      }
-
-      setGraph(oldGraph => ({
-        ...oldGraph,
-        edges: [
-          ...oldGraph.edges,
-          { startVertex: vertexToConnect, endVertex: vertexName },
-        ],
-      }));
-    } else {
+    if (!vertexToConnect) {
       setVertexToConnect(vertexName);
+      return;
     }
+
+    setVertexToConnect(undefined);
+
+    // Prevents duplicate edges
+    if (
+      vertexToConnect === vertexName ||
+      graph.edges.some(edge => doesEdgeExist(edge, vertexName, vertexToConnect))
+    ) {
+      return;
+    }
+
+    setGraph(oldGraph => ({
+      ...oldGraph,
+      edges: [
+        ...oldGraph.edges,
+        { startVertex: vertexToConnect, endVertex: vertexName },
+      ],
+    }));
+  }
+
+  function disconnectVertex(vertexName: string) {
+    setVertexToConnect(undefined);
+
+    setGraph(oldGraph => ({
+      ...oldGraph,
+      edges: oldGraph.edges.filter(
+        edge => !doesEdgeExist(edge, vertexName, vertexToConnect)
+      ),
+    }));
   }
 
   return (
@@ -141,6 +148,10 @@ function GraphViewerAndEditor({
                 editMode={editMode}
                 onConnect={() => connectVertex(vertex.name)}
                 onDelete={() => deleteVertex(vertex.name)}
+                onDisconnect={() => disconnectVertex(vertex.name)}
+                isConnected={graph.edges.some(edge =>
+                  doesEdgeExist(edge, vertex.name, vertexToConnect)
+                )}
               />
             );
           })}
@@ -173,6 +184,17 @@ function VertexContainer({
     <div className={styles.container} style={style}>
       {children}
     </div>
+  );
+}
+
+function doesEdgeExist(
+  edge: Edge,
+  vertexName1: string | undefined,
+  vertexName2: string | undefined
+) {
+  return (
+    (edge.startVertex === vertexName1 && edge.endVertex === vertexName2) ||
+    (edge.startVertex === vertexName2 && edge.endVertex === vertexName1)
   );
 }
 

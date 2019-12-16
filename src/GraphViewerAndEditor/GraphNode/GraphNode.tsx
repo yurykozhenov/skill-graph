@@ -11,14 +11,18 @@ function GraphNode(
     editMode,
     height,
     onConnect,
+    onDisconnect,
     onDelete,
+    isConnected,
   }: {
     vertex: Vertex;
     position: VertexPosition | undefined;
     editMode: boolean;
     height?: number;
     onConnect: React.MouseEventHandler;
+    onDisconnect: React.MouseEventHandler;
     onDelete: React.MouseEventHandler;
+    isConnected: boolean,
   },
   ref: React.Ref<HTMLDivElement>
 ) {
@@ -47,21 +51,37 @@ function GraphNode(
               }}
             >
               <div style={{ marginRight: 8 }}>
-                <button
-                  style={{ padding: '5px 8px' }}
-                  onClick={e => {
-                    e.stopPropagation();
-                    onConnect(e);
-                  }}
-                >
-                  Connect
-                </button>
+                {!isConnected ? (
+                  <button
+                    style={{ padding: '5px 4px' }}
+                    onClick={e => {
+                      e.stopPropagation();
+                      onConnect(e);
+                    }}
+                  >
+                    Connect
+                  </button>
+                ) : (
+                  <button
+                    style={{
+                      padding: '5px 4px',
+                      color: 'yellow',
+                      borderColor: 'yellow',
+                    }}
+                    onClick={e => {
+                      e.stopPropagation();
+                      onDisconnect(e);
+                    }}
+                  >
+                    Disconnect
+                  </button>
+                )}
               </div>
 
               <div>
                 <button
                   style={{
-                    padding: '5px 8px',
+                    padding: '5px 4px',
                     color: 'red',
                     borderColor: 'red',
                   }}
