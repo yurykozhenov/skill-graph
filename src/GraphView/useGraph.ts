@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, XYCoord } from 'react-dnd';
-import clamp from 'lodash/clamp'
+import clamp from 'lodash/clamp';
 import { Graph, Vertex, VertexPosition } from '../graphTypes';
 import { getGraph, updateGraph } from '../graphApi';
 import { computeConnectingPoints } from '../utils/computeConnectingPoints';
@@ -23,6 +23,10 @@ export function useGraph(
     if (node) {
       setNodes(oldNodes => [...oldNodes, node]);
     }
+  }
+
+  function deleteNode(nodeIndex: number) {
+    setNodes(oldNodes => oldNodes.filter((node, index) => index !== nodeIndex));
   }
 
   useEffect(() => {
@@ -123,8 +127,26 @@ export function useGraph(
     await updateGraph(graphName, graph);
   }
 
+  function deleteVertex(vertexName: string) {
+    if (!graph) return;
+
+    setGraph({
+      ...graph,
+      vertices: graph.vertices.filter(vertex => vertex.name !== vertexName),
+      positions: graph.positions.filter(
+        position => position.vertexName !== vertexName
+      ),
+      edges: graph.edges.filter(
+        edge => edge.startVertex !== vertexName && edge.endVertex !== vertexName
+      ),
+    });
+
+    deleteNode(graph.vertices.findIndex(vertex => vertex.name === vertexName));
+  }
+
   return {
     graph,
+    setGraph,
     graphWidth,
     graphHeight,
     connectingPoints,
@@ -132,5 +154,6 @@ export function useGraph(
     getVertexInfo,
     onVertexDrag,
     saveGraph,
+    deleteVertex,
   };
 }

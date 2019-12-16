@@ -9,8 +9,8 @@ export interface Vertex {
   name: string;
   rate: number;
   level: string;
-  graphList: string[];
   courseList: Course[];
+  graphList?: string[];
   branchOfKnowledge: BranchOfKnowledge;
 }
 
@@ -25,7 +25,7 @@ export interface Edge {
 }
 
 export interface VertexPosition extends Point {
-  graphName: string;
+  graphName?: string;
   vertexName: string;
 }
 

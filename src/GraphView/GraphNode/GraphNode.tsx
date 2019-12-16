@@ -10,11 +10,15 @@ function GraphNode(
     position,
     dragAndDrop,
     height,
+    onConnect,
+    onDelete,
   }: {
     vertex: Vertex;
     position: VertexPosition | undefined;
     dragAndDrop: boolean;
     height?: number;
+    onConnect: React.MouseEventHandler;
+    onDelete: React.MouseEventHandler;
   },
   ref: React.Ref<HTMLDivElement>
 ) {
@@ -34,7 +38,43 @@ function GraphNode(
         style={{ height }}
       >
         <DataBox title={vertex.name} onClick={() => setModalOpen(true)}>
-          {Array.from({ length: vertex.rate }).map(() => '⭐')}
+          {!dragAndDrop ? (
+            <>{Array.from({ length: vertex.rate }).map(() => '⭐')}</>
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              <div style={{ marginRight: 8 }}>
+                <button
+                  style={{ padding: '5px 8px' }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    onConnect(e);
+                  }}
+                >
+                  Connect
+                </button>
+              </div>
+
+              <div>
+                <button
+                  style={{
+                    padding: '5px 8px',
+                    color: 'red',
+                    borderColor: 'red',
+                  }}
+                  onClick={e => {
+                    e.stopPropagation();
+                    onDelete(e);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          )}
         </DataBox>
       </NodeContainer>
 

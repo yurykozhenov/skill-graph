@@ -42,8 +42,7 @@ async function parseResponse(response: Response) {
       );
     } else {
       alert(e.message);
+      throw e;
     }
-
-    throw e;
   }
 }

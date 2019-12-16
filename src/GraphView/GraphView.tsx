@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styles from './GraphView.module.css';
 import GraphNode from './GraphNode/GraphNode';
 import GraphEdges from './GraphEdges/GraphEdges';
@@ -20,6 +20,7 @@ function GraphView({
 
   const {
     graph,
+    setGraph,
     graphWidth,
     graphHeight,
     connectingPoints,
@@ -27,6 +28,7 @@ function GraphView({
     getVertexInfo,
     onVertexDrag,
     saveGraph,
+    deleteVertex,
   } = useGraph(graphName, {
     containerTop: edgeContainerRect.top,
     containerLeft: edgeContainerRect.left,
@@ -34,14 +36,75 @@ function GraphView({
 
   const vertexRef = useCallback(registerVertexNode, []);
 
+  const [vertexToConnect, setVertexToConnect] = useState<string>();
+
   if (!graph) return null;
+
+  const addVertex = () => {
+    setGraph({
+      ...graph,
+      vertices: [
+        ...graph.vertices,
+        {
+          name: `Vertex ${graph.vertices.length}`,
+          rate: 1,
+          level: 'All',
+          courseList: [],
+          branchOfKnowledge: { name: 'math' },
+          graphList: [graph.name],
+        },
+      ],
+      positions: [
+        ...graph.positions,
+        {
+          vertexName: `Vertex ${graph.vertices.length}`,
+          x: 0,
+          y: 0,
+        },
+      ],
+    });
+  };
+
+  const connectVertex = (vertexName: string) => {
+    if (vertexToConnect && vertexToConnect !== vertexName) {
+      setVertexToConnect(undefined);
+
+      // Prevents duplicate edges
+      if (
+        graph.edges.some(
+          edge =>
+            (edge.startVertex === vertexName &&
+              edge.endVertex === vertexToConnect) ||
+            (edge.startVertex === vertexToConnect &&
+              edge.endVertex === vertexName)
+        )
+      ) {
+        return;
+      }
+
+      setGraph({
+        ...graph,
+        edges: [
+          ...graph.edges,
+          { startVertex: vertexToConnect, endVertex: vertexName },
+        ],
+      });
+    } else {
+      setVertexToConnect(vertexName);
+    }
+  };
 
   return (
     <>
       {dragAndDrop && (
-        <div style={{ padding: '8px 16px' }}>
-          <button onClick={() => saveGraph()}>Save Graph</button>
-        </div>
+        <>
+          <div style={{ padding: '8px 16px' }}>
+            <button onClick={() => saveGraph()} style={{ marginRight: 8 }}>
+              Save Graph
+            </button>
+            <button onClick={addVertex}>Add Vertex</button>
+          </div>
+        </>
       )}
 
       <div style={{ overflow: 'auto', paddingTop: 8 }}>
@@ -74,6 +137,8 @@ function GraphView({
                 position={vertexPosition}
                 height={vertexHeight}
                 dragAndDrop={dragAndDrop}
+                onConnect={() => connectVertex(vertex.name)}
+                onDelete={() => deleteVertex(vertex.name)}
               />
             );
           })}
