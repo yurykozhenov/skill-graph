@@ -8,10 +8,10 @@ import { DropTargetMonitor } from 'react-dnd';
 
 function GraphView({
   graphName,
-  dragAndDrop = false,
+  editMode = false,
 }: {
   graphName: string;
-  dragAndDrop?: boolean;
+  editMode?: boolean;
 }) {
   const edgeContainerRef = useRef<HTMLDivElement>(null);
   const edgeContainerRect = edgeContainerRef.current
@@ -96,7 +96,7 @@ function GraphView({
 
   return (
     <>
-      {dragAndDrop && (
+      {editMode && (
         <>
           <div style={{ padding: '8px 16px' }}>
             <button onClick={() => saveGraph()} style={{ marginRight: 8 }}>
@@ -119,7 +119,7 @@ function GraphView({
         </div>
 
         <VertexContainer
-          dragAndDrop={dragAndDrop}
+          editMode={editMode}
           onVertexDrag={onVertexDrag}
           style={{ width: graphWidth, height: graphHeight }}
         >
@@ -136,7 +136,7 @@ function GraphView({
                 vertex={vertex}
                 position={vertexPosition}
                 height={vertexHeight}
-                dragAndDrop={dragAndDrop}
+                editMode={editMode}
                 onConnect={() => connectVertex(vertex.name)}
                 onDelete={() => deleteVertex(vertex.name)}
               />
@@ -150,16 +150,16 @@ function GraphView({
 
 function VertexContainer({
   children,
-  dragAndDrop,
+  editMode,
   onVertexDrag,
   style,
 }: {
   children: React.ReactNode;
-  dragAndDrop: boolean;
+  editMode: boolean;
   onVertexDrag: (item: DragItem, monitor: DropTargetMonitor) => void;
   style: React.CSSProperties;
 }) {
-  return dragAndDrop ? (
+  return editMode ? (
     <DropContainer
       onDrag={onVertexDrag}
       className={styles.container}

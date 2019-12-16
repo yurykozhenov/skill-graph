@@ -6,7 +6,7 @@ import GraphView from '../GraphView/GraphView';
 function GraphEdit({ graphName }: { graphName: string }) {
   return (
     <DndProvider backend={HTML5Backend}>
-      <GraphView graphName={graphName} dragAndDrop />
+      <GraphView graphName={graphName} editMode />
     </DndProvider>
   );
 }

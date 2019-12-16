@@ -8,14 +8,14 @@ function GraphNode(
   {
     vertex,
     position,
-    dragAndDrop,
+    editMode,
     height,
     onConnect,
     onDelete,
   }: {
     vertex: Vertex;
     position: VertexPosition | undefined;
-    dragAndDrop: boolean;
+    editMode: boolean;
     height?: number;
     onConnect: React.MouseEventHandler;
     onDelete: React.MouseEventHandler;
@@ -31,14 +31,14 @@ function GraphNode(
     <>
       <NodeContainer
         ref={ref}
-        dragAndDrop={dragAndDrop}
+        editMode={editMode}
         id={vertex.name}
         left={left}
         top={top}
         style={{ height }}
       >
         <DataBox title={vertex.name} onClick={() => setModalOpen(true)}>
-          {!dragAndDrop ? (
+          {!editMode ? (
             <>{Array.from({ length: vertex.rate }).map(() => '⭐')}</>
           ) : (
             <div
@@ -90,14 +90,14 @@ function GraphNode(
 const NodeContainer = React.forwardRef(function(
   {
     children,
-    dragAndDrop,
+    editMode,
     id,
     left,
     top,
     style,
   }: {
     children: React.ReactNode;
-    dragAndDrop: boolean;
+    editMode: boolean;
     id: string;
     left: number;
     top: number;
@@ -105,7 +105,7 @@ const NodeContainer = React.forwardRef(function(
   },
   ref: React.Ref<HTMLDivElement>
 ) {
-  return dragAndDrop ? (
+  return editMode ? (
     <Draggable
       ref={ref}
       id={id}
