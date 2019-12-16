@@ -2,18 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, XYCoord } from 'react-dnd';
 import clamp from 'lodash/clamp';
 import { Graph, Vertex, VertexPosition } from '../graphTypes';
-import { getGraph, updateGraph } from '../graphApi';
+import { createGraph, updateGraph } from '../graphApi';
 import { computeConnectingPoints } from '../utils/computeConnectingPoints';
 import { DragItem } from '../shared/DragAndDrop/DropContainer';
 
-export function useGraph(
-  graphName: string,
+export function useGraphViewerAndEditor(
+  initialGraph: Graph,
   {
     containerTop,
     containerLeft,
   }: { containerTop: number; containerLeft: number }
 ) {
-  const [graph, setGraph] = useState<Graph>();
+  const [graph, setGraph] = useState<Graph>(initialGraph);
   const [nodes, setNodes] = useState<HTMLDivElement[]>([]);
   const nodeRects = nodes.map(node => node.getBoundingClientRect());
 
@@ -29,37 +29,22 @@ export function useGraph(
     setNodes(oldNodes => oldNodes.filter((node, index) => index !== nodeIndex));
   }
 
-  useEffect(() => {
-    setNodes([]);
-
-    const fetchGraph = async () => {
-      try {
-        const fetchedGraph = await getGraph(graphName);
-        setGraph(fetchedGraph);
-      } catch (err) {
-        console.log('Error while trying to fetch graph');
-        console.error(err);
-        alert(err.message);
-      }
-    };
-
-    fetchGraph();
-  }, [graphName]);
-
   // Batches re-renders caused by drag-and-drop to improve performance
   useEffect(() => {
-    if (!graph) return;
-
     let request: number;
 
     const performAnimation = () => {
       request = requestAnimationFrame(performAnimation);
 
       if (updatedPositionsRef.current) {
-        setGraph({
-          ...graph,
-          positions: updatedPositionsRef.current,
-        });
+        setGraph(oldGraph =>
+          updatedPositionsRef.current
+            ? {
+                ...oldGraph,
+                positions: updatedPositionsRef.current,
+              }
+            : oldGraph
+        );
 
         updatedPositionsRef.current = null;
       }
@@ -109,8 +94,6 @@ export function useGraph(
   }
 
   const onVertexDrag = (item: DragItem, monitor: DropTargetMonitor) => {
-    if (!graph) return;
-
     const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
 
     const left = clamp(Math.round(item.left + delta.x), 0, graphWidth);
@@ -122,24 +105,24 @@ export function useGraph(
   };
 
   async function saveGraph() {
-    if (!graph) return;
-
-    await updateGraph(graphName, graph);
+    if (graph.name) {
+      await updateGraph(graph);
+    } else {
+      await createGraph(graph);
+    }
   }
 
   function deleteVertex(vertexName: string) {
-    if (!graph) return;
-
-    setGraph({
-      ...graph,
-      vertices: graph.vertices.filter(vertex => vertex.name !== vertexName),
-      positions: graph.positions.filter(
+    setGraph(oldGraph => ({
+      ...oldGraph,
+      vertices: oldGraph.vertices.filter(vertex => vertex.name !== vertexName),
+      positions: oldGraph.positions.filter(
         position => position.vertexName !== vertexName
       ),
-      edges: graph.edges.filter(
+      edges: oldGraph.edges.filter(
         edge => edge.startVertex !== vertexName && edge.endVertex !== vertexName
       ),
-    });
+    }));
 
     deleteNode(graph.vertices.findIndex(vertex => vertex.name === vertexName));
   }

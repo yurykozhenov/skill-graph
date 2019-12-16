@@ -2,18 +2,24 @@ import React from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import GraphViewerAndEditor from '../GraphViewerAndEditor/GraphViewerAndEditor';
+import { Graph } from '../graphTypes';
 import GraphConfig from '../GraphConfig/GraphConfig';
 
-function GraphEdit() {
+const emptyGraph: Graph = {
+  name: '',
+  vertices: [],
+  edges: [],
+  positions: [],
+};
+
+function GraphCreate() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <GraphConfig>
-        {initialGraph => (
-          <GraphViewerAndEditor initialGraph={initialGraph} editMode />
-        )}
+      <GraphConfig useFetcher={false}>
+        <GraphViewerAndEditor initialGraph={emptyGraph} editMode />
       </GraphConfig>
     </DndProvider>
   );
 }
 
-export default GraphEdit;
+export default GraphCreate;

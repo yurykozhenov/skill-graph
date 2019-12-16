@@ -35,7 +35,7 @@ function GraphNode(
         id={vertex.name}
         left={left}
         top={top}
-        style={{ height }}
+        style={{ height: height || undefined }}
       >
         <DataBox title={vertex.name} onClick={() => setModalOpen(true)}>
           {!editMode ? (

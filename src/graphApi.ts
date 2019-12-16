@@ -8,9 +8,17 @@ export async function getGraph(name: string): Promise<Graph> {
   return parseResponse(response);
 }
 
-export async function updateGraph(name: string, graph: Graph): Promise<Graph> {
+export async function updateGraph(graph: Graph): Promise<Graph> {
   const response = await fetch(`${BASE_URL}/graph/update`, {
     method: 'PUT',
+    body: JSON.stringify(graph),
+  });
+  return parseResponse(response);
+}
+
+export async function createGraph(graph: Graph): Promise<Graph> {
+  const response = await fetch(`${BASE_URL}/graph/create`, {
+    method: 'POST',
     body: JSON.stringify(graph),
   });
   return parseResponse(response);
