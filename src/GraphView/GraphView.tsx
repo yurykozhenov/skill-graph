@@ -5,9 +5,7 @@ import GraphConfig from '../GraphConfig/GraphConfig';
 function GraphView() {
   return (
     <GraphConfig>
-      {initialGraph => (
-        <GraphViewerAndEditor initialGraph={initialGraph} />
-      )}
+      {initialGraph => <GraphViewerAndEditor initialGraph={initialGraph} />}
     </GraphConfig>
   );
 }

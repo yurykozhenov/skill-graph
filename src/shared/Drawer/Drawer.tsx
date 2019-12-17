@@ -26,7 +26,7 @@ export function Drawer({
     } else {
       setStyle({
         transform: 'translateX(500px)',
-        transition: 'transform 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms'
+        transition: 'transform 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
       });
 
       setTimeout(() => setDestroyed(true), 195);

@@ -51,7 +51,8 @@ button {
   outline: none;
 }
 
-button:focus, button:hover {
+button:focus,
+button:hover {
   background-color: rgba(127, 127, 127, 0.3);
 }
 

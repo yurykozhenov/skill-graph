@@ -22,7 +22,7 @@ function GraphNode(
     onConnect: React.MouseEventHandler;
     onDisconnect: React.MouseEventHandler;
     onDelete: React.MouseEventHandler;
-    isConnected: boolean,
+    isConnected: boolean;
   },
   ref: React.Ref<HTMLDivElement>
 ) {
